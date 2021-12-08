@@ -54,6 +54,7 @@ for i in range(len(MAP)):
 
 run = True
 i = 0
+font = pygame.font.Font(None, 32)
 
 def continu():
     pacman.pointPlace(points)
@@ -64,6 +65,11 @@ def continu():
 
     for wall in walls:
         wall.reload()
+
+    textsurface = font.render('Score: '+str(pacman.score), False, pygame.Color('#39FFF9'))
+    textRect = textsurface.get_rect()
+    textRect.center = (620, 20)
+    fen.blit(textsurface, textRect)
 
     #print("x = ", pacman.x, " y = ", pacman.y)
     pygame.display.update()

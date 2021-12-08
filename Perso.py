@@ -87,7 +87,6 @@ class Pac:
         for pt in points:
             if (pt.x >= self.x and pt.x <= self.x+self.height and pt.y >= self.y and pt.y <= self.y+self.height):
                 self.score += 1
-                print("Score: ", self.score)
                 points.remove(pt)
 
     def isMoving(self):
