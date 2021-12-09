@@ -2,12 +2,11 @@ import pygame
 from Perso import Pac
 from Wall import Wall
 from Item import Point
+from Item import Fruit
 pygame.init()
 width = 684
 height = 770
 fen = pygame.display.set_mode((width, height))
-image = pygame.image.load("/Users/benjaminbrehier/OneDrive/ProjetDev/Python/PacMan/img/background.jpg").convert_alpha()
-image = pygame.transform.scale(image, (900, 900))
 pygame.display.update()
 
 
@@ -43,22 +42,37 @@ walls = []
 for i in range(len(MAP)):
     for j in range(len(MAP[i])):
         if (MAP[i][j] == 1):
-            pt = Point(fen, (j+0.5)*width/19, (i+0.5)*height/22)
+            pt = Point(fen, (j+0.5)*width/19, (i+0.5)*height/22, "point")
             points.append(pt)
         elif (MAP[i][j] == 0):
             wall = Wall(fen, j*width/19, i*height/22, (j+1)*width/19, (i+1)*height/22)
             walls.append(wall)
         elif (MAP[i][j] == 5):
             pacman = Pac(fen, j*width/19, i*height/22)
+        elif (MAP[i][j] == 4):
+            pt = Point(fen, (j+0.5)*width/19, (i+0.5)*height/22, "power")
+            points.append(pt)
+            #cerise = Fruit(fen, j*width/19, i*height/22, "cerise")
     
 
 run = True
 i = 0
 font = pygame.font.Font(None, 32)
+var = []
+var.append(i)       #Rend i utilisable dans toutes fonctions
 
-def continu():
+
+def continu():      #Réaffiche tous les éléments 
+    var[0]+=1    
+    if (var[0]%10 == 0):
+        pacman.changeImg()
     pacman.pointPlace(points)
     
+    if (pacman.isSuper() == True):
+        pacman.compteurSuper -=1
+        if (pacman.compteurSuper == 0):
+            pacman.super = False
+
     pacman.move(walls)
     for pt in points:
         pt.reload()
@@ -80,38 +94,23 @@ while run:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
                 while(not pacman.thereNoWallOn(walls, "left") and pacman.isMoving()):
-                    i+=1    
-                    if (i%10 == 0):
-                        pacman.changeImg()
                     continu()
                 pacman.turnLeft()
             if event.key == pygame.K_RIGHT:
                 while(not pacman.thereNoWallOn(walls, "right") and pacman.isMoving()):
-                    i+=1    
-                    if (i%10 == 0):
-                        pacman.changeImg()
                     continu()    
                 pacman.turnRight()
 
             if event.key == pygame.K_UP:
                 while(not pacman.thereNoWallOn(walls, "up") and pacman.isMoving()):
-                    i+=1    
-                    if (i%10 == 0):
-                        pacman.changeImg()
                     continu()    
                 pacman.turnUp()
 
             if event.key == pygame.K_DOWN:
                 while(not pacman.thereNoWallOn(walls, "down") and pacman.isMoving()):
-                    i+=1    
-                    if (i%10 == 0):
-                        pacman.changeImg()
                     continu()    
                 pacman.turnDown()
 
-    i+=1    
-    if (i%10 == 0):
-        pacman.changeImg()
     continu()
 
 pygame.quit()
