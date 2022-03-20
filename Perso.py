@@ -10,13 +10,15 @@ class Pac:
         self.height = 34
         self.width = 34
         self.score = 0
-        self.image = pygame.image.load("/Users/benjaminbrehier/Documents/PacMan/img/Pac.png").convert_alpha()
+        self.fruitEaten = False
+        self.image = pygame.image.load("/Users/benjaminbrehier/Documents/Dev/PacMan/img/Pac.png").convert_alpha()
         self.image = pygame.transform.scale(self.image, (self.width, self.height))
-        self.image2 = pygame.image.load("/Users/benjaminbrehier/Documents/PacMan/img/PacFerme2.png").convert_alpha()
+        self.image2 = pygame.image.load("/Users/benjaminbrehier/Documents/Dev/PacMan/img/PacFerme2.png").convert_alpha()
         self.image2 = pygame.transform.scale(self.image2, (self.width, self.height))
         self.direction = ""
         self.super = False
         self.compteurSuper = 0
+        self.round = 1
         fen.blit(self.image, (x, y))
 
     def changeImg(self):        #Alterne l'image entre le PacMan bouche ouverte et bouche fermée
@@ -101,11 +103,18 @@ class Pac:
         for pt in points:
             if (pt.x >= self.x and pt.x <= self.x+self.height and pt.y >= self.y and pt.y <= self.y+self.height):
                 if (pt.type == "point"):
-                    self.score += 1
+                    self.score += 10
                 else:
                     self.super = True
                     self.compteurSuper += 500
+                    self.score += 50
                 points.remove(pt)
+
+    def fruitPlace(self, fruits):
+        for fruit in fruits:
+            if (fruit.x >= self.x and fruit.x <= self.x+self.height and fruit.y >= self.y-1 and fruit.y <= self.y+self.height):
+                self.score += fruit.value
+                fruits.remove(fruit)
 
     def isMoving(self):     #True si PacMan se déplace
         if (self.x == self.preX and self.y == self.preY):
@@ -113,5 +122,5 @@ class Pac:
         else:
             return True
 
-    def isSuper(self):      #True si PacMan est en mode super (peut manger les fantômes)
+    def isSuper(self):      #True si PacMan est en mode super (peut manger les fantômes) 
         return self.super
