@@ -112,7 +112,7 @@ class Pac:
 
     def fruitPlace(self, fruits):
         for fruit in fruits:
-            if (fruit.x >= self.x and fruit.x <= self.x+self.height and fruit.y >= self.y-1 and fruit.y <= self.y+self.height):
+            if (fruit.x+fruit.size >= self.x and fruit.x <= self.x+self.height and (fruit.y >= self.y-1 and fruit.y+fruit.size <= self.y+self.height)):
                 self.score += fruit.value
                 fruits.remove(fruit)
 
